@@ -40,6 +40,18 @@ router.post('/celebrities', (req, res, next) => {
     });
 });
 
+router.post('/celebrities/:id/delete', (req, res, next) => {
+  const { id } = req.params;
+  Celebrity.findByIdAndDelete(id)
+    .then(() => {
+      res.redirect('/celebrities');
+    })
+    .catch((error) => {
+      console.log('Error deleting celebrity', error);
+      next(error);
+    });
+});
+
 // Handle GET request for website root
 router.get('/', (req, res, next) => {
   res.render('index');
