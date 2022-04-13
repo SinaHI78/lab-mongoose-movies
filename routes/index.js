@@ -12,6 +12,10 @@ router.get('/celebrities', (req, res, next) => {
     });
 });
 
+router.get('/celebrities/create', (req, res) => {
+  res.render('celebrities/create');
+});
+
 router.get('/celebrities/:id', (req, res, next) => {
   const { id } = req.params;
   Celebrity.findById(id)
@@ -21,6 +25,18 @@ router.get('/celebrities/:id', (req, res, next) => {
     .catch((error) => {
       console.log('Could not load celebrity', error);
       next(error);
+    });
+});
+
+router.post('/celebrities', (req, res, next) => {
+  const { name, occupation, catchPhrase } = req.body;
+  Celebrity.create({ name, occupation, catchPhrase })
+    .then((celebrity) => {
+      const id = celebrity._id;
+      res.redirect('/celebrities/' + id);
+    })
+    .catch((error) => {
+      res.render('/celebrities/create');
     });
 });
 
